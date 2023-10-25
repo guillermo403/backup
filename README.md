@@ -2,7 +2,15 @@
 
 Script para hacer backups en Linux
 
-En el archivo 'exclude-files.txt' se ponen los archivos a excluir, uno por línea
+Ejecutar con el comando
+```bash
+bash backup.sh
+```
+
+### ARCHIVOS DE CONFIGURACIÓN
+
+- exclude-files.txt
+  archivos a excluir, uno por línea (Se pueden poner expresiones regulares)
 ```
 node_modules
 .git
@@ -10,7 +18,8 @@ package-lock.json
 pnpm-lock.yaml
 ```
 
-En 'colors.sh' están definidos los colores que se usan en los logs
+- colors.sh
+  Aquí están definidos los colores que se usan para los logs
 ```bash
 ENDCOLOR='\033[0m'        # Text Reset
 RED='\033[0;31m'          # Red
@@ -20,7 +29,8 @@ BLUE='\033[0;34m'         # Blue
 CYAN='\033[0;36m'         # Cyan
 ```
 
-Y en 'config.sh' están definidos las configuraciones del script
+- config.sh
+  Configuraciones del script
 ```bash
 # Estas variables son necesarias para el uso correcto del script
 
