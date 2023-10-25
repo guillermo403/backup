@@ -2,4 +2,3 @@ node_modules
 .git
 package-lock.json
 pnpm-lock.yaml
-.angular/cache
