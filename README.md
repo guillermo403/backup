@@ -1,12 +1,8 @@
-# Backups linux
+### Backups linux
 
-<large>
-  Script para hacer backups en Linux
-</large>
+Script para hacer backups en Linux
 
-<small>
-  En el archivo 'exclude-files.txt' se ponen los archivos a excluir, uno por línea
-</small>
+En el archivo 'exclude-files.txt' se ponen los archivos a excluir, uno por línea
 ```
 node_modules
 .git
@@ -14,13 +10,9 @@ package-lock.json
 pnpm-lock.yaml
 ```
 
-<small>
-  En 'colors.sh' están definidos los colores
-</small>
+En 'colors.sh' están definidos los colores
 
-<small>
-  Y en 'config.sh' están definidos las configuraciones del script
-</small>
+Y en 'config.sh' están definidos las configuraciones del script
 ```bash
 # Estas variables son necesarias para el uso correcto del script
 
