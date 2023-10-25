@@ -10,7 +10,7 @@ bash backup.sh
 ### ARCHIVOS DE CONFIGURACIÓN
 
 - exclude-files.txt
-  archivos a excluir, uno por línea (Se pueden poner expresiones regulares)
+Archivos a excluir, uno por línea (Se pueden poner expresiones regulares)
 ```
 node_modules
 .git
@@ -19,7 +19,7 @@ pnpm-lock.yaml
 ```
 
 - colors.sh
-  Aquí están definidos los colores que se usan para los logs
+Aquí están definidos los colores que se usan para los logs
 ```bash
 ENDCOLOR='\033[0m'        # Text Reset
 RED='\033[0;31m'          # Red
@@ -30,7 +30,7 @@ CYAN='\033[0;36m'         # Cyan
 ```
 
 - config.sh
-  Configuraciones del script
+Configuraciones del script
 ```bash
 # Estas variables son necesarias para el uso correcto del script
 
