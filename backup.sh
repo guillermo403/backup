@@ -9,15 +9,6 @@ BACKUP_PATH=""
 i=1
 
 function log {
-  if [ ! -f $LOG_FILE ]; then
-    touch $LOG_FILE
-  fi
-
-  if [ ! -w $LOG_FILE ]; then
-    echo "El archivo $LOG_FILE no tiene permisos de escritura"
-    exit 1
-  fi
-
   # Definimos el color y tipo de mensaje
   case "$2" in
     ERROR)
@@ -40,6 +31,21 @@ function log {
 
   # Escribimos el mensaje en el archivo de log
   echo -e "${BLUE}[$(date)]${ENDCOLOR} |${typecolor}${type}${ENDCOLOR}| # $1" >> $LOG_FILE
+}
+
+function check_log_file {
+  # Comprobamos si el archivo de log existe y si no es así, lo creamos
+  if [ ! -f $LOG_FILE ]; then
+    touch $LOG_FILE
+  else
+    echo "" >> $LOG_FILE
+  fi
+
+  # Comprobamos si el archivo de log tiene permisos de escritura
+  if [ ! -w $LOG_FILE ]; then
+    echo "El archivo $LOG_FILE no tiene permisos de escritura"
+    exit 1
+  fi
 }
 
 function set_backup_path {
@@ -77,6 +83,9 @@ function check_backup_path {
 }
 
 function main {
+  # Comprobamos si el archivo de log existe y si tiene permisos de escritura
+  check_log_file
+
   log "Inicio de la ejecución del script"
 
   # Comprobamos el archivo log y el nombre del archivo de copia de seguridad
