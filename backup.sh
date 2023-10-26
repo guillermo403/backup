@@ -1,80 +1,90 @@
 #!/bin/bash
 
-# import global variables
-source ./config.sh
-source ./colors.sh
+function define_variables () {
+  # Colors
+  readonly endcolor='\033[0m'
+  readonly red='\033[0;31m'
+  readonly green='\033[0;32m'
+  readonly yellow='\033[0;33m'
+  readonly blue='\033[0;34m'
+  readonly cyan='\033[0;36m'
 
-BACKUP_NAME="${BACKUP_ORIGINAL_NAME}"
-BACKUP_PATH=""
-i=1
+  # Constants
+  readonly date=$(date +%Y%m%d)
+  readonly script_path=$(dirname $(realpath $0))
+  readonly destination_path=~/Documentos
+  readonly log_file="$HOME/backup-${date}_out.log"
+  readonly files_to_exlude="${script_path}/exclude-files.txt"
+  readonly backup_original_name="backup-${date}"
 
-function log {
-  # Definimos el color y tipo de mensaje
+  # Other variables
+  backup_name="${backup_original_name}"
+  backup_path=""
+  i=1
+}
+
+function log () {
+  # Define color and type of message
+  local typecolor=$cyan
+  local type="INFO"
   case "$2" in
     ERROR)
-      typecolor=$RED
+      typecolor="$red"
       type="ERROR"
       ;;
     WARNING)
-      typecolor=$YELLOW
+      typecolor="$yellow"
       type="WARNING"
       ;;
     SUCCESS)
-      typecolor=$GREEN
+      typecolor="$green"
       type="SUCCESS"
-      ;;
-    *)
-      typecolor=$CYAN
-      type="INFO"
       ;;
   esac
 
   # Escribimos el mensaje en el archivo de log
-  echo -e "${BLUE}[$(date)]${ENDCOLOR} |${typecolor}${type}${ENDCOLOR}| # $1" >> $LOG_FILE
+  echo -e "$blue[$(date)]$endcolor | $typecolor${type}$endcolor | # $1" >> $log_file
 }
 
-function check_log_file {
-  # Comprobamos si el archivo de log existe y si no es así, lo creamos
-  if [ ! -f $LOG_FILE ]; then
-    touch $LOG_FILE
+function check_log_file () {
+  # Check if log file exists
+  if [[ ! -f $log_file ]]; then
+    touch $log_file
   else
-    echo "" >> $LOG_FILE
+    echo "" >> $log_file
   fi
 
-  # Comprobamos si el archivo de log tiene permisos de escritura
-  if [ ! -w $LOG_FILE ]; then
-    echo "El archivo $LOG_FILE no tiene permisos de escritura"
+  # Check if log file is writable
+  if [[ ! -w $log_file ]]; then
+    echo "El archivo $log_file no tiene permisos de escritura"
     exit 1
   fi
 }
 
-function set_backup_path {
-  BACKUP_PATH="${SCRIPT_PATH}/${BACKUP_NAME}.tar.gz"
+function set_backup_path () {
+  backup_path="$script_path/$backup_name.tar.gz"
 }
 
-function check_files_to_exclude {
-  if [ ! -f $FILES_TO_EXCLUDE ]
-  then
-    log "El archivo $FILES_TO_EXCLUDE no existe" "ERROR"
+function check_files_to_exclude () {
+  if [[ ! -f $files_to_exlude ]]; then
+    log "El archivo $files_to_exlude no existe" "ERROR"
     exit 1
   fi
 }
 
-function check_destination_path {
-  if [ ! -d $DESTINATION_PATH ]
-  then
-    log "El directorio $DESTINATION_PATH no existe" "ERROR"
+function check_destination_path () {
+  if [[ ! -d $destination_path ]]; then
+    log "El directorio $destination_path no existe" "ERROR"
     exit 1
   fi
 }
 
-function check_backup_path {
-  # Comprobamos si el archivo de copia de seguridad ya existe y si es así, le añadimos un número al final
-  if [ -f $BACKUP_PATH ]
-  then
+function check_backup_path () {
+  # Check if backup file exists and if is so we add a number to the name
+  if [[ -f $backup_path ]]; then
     ((i++))
-    log "El archivo $BACKUP_PATH ya existe" "WARNING"
-    BACKUP_NAME="${BACKUP_ORIGINAL_NAME}($i)"
+    log "El archivo $backup_path ya existe" "WARNING"
+    backup_name="$backup_original_name($i)"
     
     set_backup_path
     check_backup_path
@@ -82,7 +92,9 @@ function check_backup_path {
 
 }
 
-function main {
+function main () {
+  define_variables
+  
   # Comprobamos si el archivo de log existe y si tiene permisos de escritura
   check_log_file
 
@@ -95,15 +107,14 @@ function main {
   check_backup_path
 
   # Nos movemos al directorio donde queremos crear la copia de seguridad
-  cd $DESTINATION_PATH
+  cd $destination_path
 
   # Empaquetamos los archivos y directorios que queremos copiar
-  tar --exclude-from=$FILES_TO_EXCLUDE -zcvf $BACKUP_PATH * &> /dev/null
+  tar --exclude-from=$files_to_exlude -zcvf $backup_path * &> /dev/null
 
   # Comprobamos si la copia de seguridad se ha creado correctamente
-  if [ $? -eq 0 ]
-  then
-      log "Copia de seguridad creada correctamente en: ${BACKUP_PATH}" "SUCCESS"
+  if [[ $? -eq 0 ]]; then
+      log "Copia de seguridad creada correctamente en: $backup_path" "SUCCESS"
   else
       log "Error al crear la copia de seguridad" "ERROR"
   fi
