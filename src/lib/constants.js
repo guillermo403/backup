@@ -1,6 +1,7 @@
-import { join } from 'node:path'
+import { join, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-export const __dirname = () => join(import.meta.url.replace('file://', ''), '..')
+export const __dirname = () => dirname(fileURLToPath(import.meta.url))
 export const ROOT = join(__dirname(), '..', '..')
 export const googleApi = { client: null }
 

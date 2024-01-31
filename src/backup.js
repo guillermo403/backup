@@ -1,3 +1,4 @@
+import path from 'node:path'
 import config from './config.js'
 import { copyDir, exists, remove } from './helpers/file-system.js'
 import logger, { LOADING } from './lib/logger.js'
@@ -8,6 +9,8 @@ export default async function backup () {
   logger.info('Ejecutando backup...')
 
   for (const backup of config.backups) {
+    if (config.backups.length > 1) logger.info('==================================================')
+
     if (!await exists(backup.dir_path)) {
       logger.error(`La carpeta '${backup.dir_path}' no existe`)
       return
@@ -30,7 +33,7 @@ export default async function backup () {
     await remove(backup.backup_path)
 
     // Upload to Google Drive
-    await uploadFile(backup.backup_zip_path, backup.backup_zip_path.split('/').pop())
+    await uploadFile(backup.backup_zip_path, backup.backup_zip_path.split(path.sep).pop())
 
     // Remove zip
     await remove(backup.backup_zip_path)

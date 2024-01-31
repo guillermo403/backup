@@ -1,0 +1,30 @@
+{
+  "name": "backup",
+  "version": "1.0.0",
+  "description": "Programa para hacer copias de seguridad y subirlas a Google Drive",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node .",
+    "lint": "standard .",
+    "dev": "node --watch ."
+  },
+  "keywords": [
+    "backup"
+  ],
+  "author": "Guillermo Merino",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/local-auth": "^3.0.1",
+    "archiver": "^6.0.1",
+    "googleapis": "^131.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-config-standard-with-typescript": "^43.0.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-promise": "^6.1.1"
+  }
+}

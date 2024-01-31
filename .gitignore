@@ -1,8 +1,7 @@
 node_modules
 backups
 logs
-package.json
 package-lock.json
 pnpm-lock.yaml
-google-credentials
+google-credentials/*
 last-execution.json

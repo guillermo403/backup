@@ -1,7 +1,7 @@
 import { join } from 'node:path'
 import backup from './backup.js'
 import config from './config.js'
-import { exists, readFile, remove, writeFile } from './helpers/file-system.js'
+import { exists, readFile, remove, rename, writeFile } from './helpers/file-system.js'
 import { ROOT } from './lib/constants.js'
 import { ONE_SECOND } from './utils/time.js'
 import authorize from './utils/google-drive/authenticate.js'
@@ -26,7 +26,7 @@ async function start () {
 }
 
 async function startLoop () {
-  const hasToExecute = await checkDayAndHour()
+  const hasToExecute = await canExecute()
   if (!hasToExecute || executing) return
 
   executing = true
@@ -34,11 +34,18 @@ async function startLoop () {
   executing = false
 }
 
-async function checkDayAndHour () {
+async function canExecute () {
   const d = new Date()
   const day = d.getDay()
   const hour = d.getHours()
   const minute = d.getMinutes()
+
+  const forceExecutionPath = join(ROOT, 'forzar-ejecucion.txt')
+  const newForceExecutionPath = join(ROOT, 'forzar-ejecucion.txt_disabled')
+  if (await exists(forceExecutionPath)) {
+    await rename(forceExecutionPath, newForceExecutionPath)
+    return true
+  }
 
   const { backupTime, backupDays } = config
   const { hours: backupHour, minutes: backupMinute } = backupTime

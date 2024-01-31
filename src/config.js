@@ -1,4 +1,4 @@
-import { join } from 'node:path'
+import { join, sep } from 'node:path'
 import { exists, mkdir, readFile } from './helpers/file-system.js'
 import { ROOT } from './lib/constants.js'
 import logger, { LOADING } from './lib/logger.js'
@@ -28,7 +28,7 @@ const day = String(d.getFullYear()) + String(d.getMonth() + 1).padStart(2, '0') 
 // Backup folders
 const backups = []
 for (const dir of c.carpetas) {
-  const dirName = dir.split('/').pop()
+  const dirName = dir.split(sep).pop()
   backups.push(
     {
       dir_name: dirName,

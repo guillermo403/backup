@@ -79,3 +79,12 @@ export async function writeFile (path, content) {
     })
   })
 }
+
+export async function rename (oldPath, newPath) {
+  return new Promise((resolve, reject) => {
+    fs.rename(oldPath, newPath, (err) => {
+      if (err) reject(err)
+      resolve()
+    })
+  })
+}

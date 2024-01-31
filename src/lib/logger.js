@@ -53,6 +53,10 @@ function writeLog ({ message, type, loading }) {
     str += `${message}\n`
   }
 
-  process.stdout._write(str)
+  try {
+    process.stdout._write(str)
+  } catch (error) {
+    console.log(`${localDate} [${type.toUpperCase()}] # ${message}`)
+  }
   w(str)
 }
